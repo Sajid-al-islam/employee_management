@@ -19,6 +19,38 @@ use Throwable;
  *     description="API Endpoints for Employee Management"
  * )
  */
+
+/**
+ * @OA\Info(
+ *     title="Employee Management API",
+ *     version="1.0.0",
+ *     description="API for managing employees and their details",
+ *     @OA\Contact(
+ *         email="support@example.com"
+ *     ),
+ *     @OA\License(
+ *         name="MIT",
+ *         url="https://opensource.org/licenses/MIT"
+ *     )
+ * )
+ *
+ * @OA\Server(
+ *     url="http://localhost:8000/api",
+ *     description="Local API Server"
+ * )
+ *
+ * @OA\SecurityScheme(
+ *     securityScheme="bearerAuth",
+ *     type="http",
+ *     scheme="bearer",
+ *     bearerFormat="JWT"
+ * )
+ *
+ * @OA\Tag(
+ *     name="Employees",
+ *     description="Operations about employees"
+ * )
+ */
 class EmployeeController extends Controller
 {
     /**
@@ -188,7 +220,20 @@ class EmployeeController extends Controller
      *     description="Stores a new employee record with details",
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/StoreEmployeeRequest")
+     *         @OA\JsonContent(
+     *             required={"name", "email", "department_id", "details"},
+     *             @OA\Property(property="name", type="string", example="John Doe"),
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *             @OA\Property(property="department_id", type="integer", example=1),
+     *             @OA\Property(
+     *                 property="details",
+     *                 type="object",
+     *                 required={"designation", "salary", "joined_date"},
+     *                 @OA\Property(property="designation", type="string", example="Software Engineer"),
+     *                 @OA\Property(property="salary", type="number", format="float", example=50000.00),
+     *                 @OA\Property(property="joined_date", type="string", format="date", example="2023-01-15")
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response=201,
@@ -328,7 +373,18 @@ class EmployeeController extends Controller
      *     ),
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/UpdateEmployeeRequest")
+     *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="string", example="John Doe Updated"),
+     *             @OA\Property(property="email", type="string", format="email", example="john.updated@example.com"),
+     *             @OA\Property(property="department_id", type="integer", example=2),
+     *             @OA\Property(
+     *                 property="details",
+     *                 type="object",
+     *                 @OA\Property(property="designation", type="string", example="Senior Software Engineer"),
+     *                 @OA\Property(property="salary", type="number", format="float", example=60000.00),
+     *                 @OA\Property(property="joined_date", type="string", format="date", example="2023-01-15")
+     *             )
+     *         )
      *     ),
      *     @OA\Response(
      *         response=200,
